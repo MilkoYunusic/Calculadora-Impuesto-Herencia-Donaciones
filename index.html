@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis Patrimonial · Herencia vs. Donación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,500;9..144,0,600;9..144,1,400;9..144,1,500&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #faf8f3;
+    --bg-alt: #f1ede4;
+    --bg-table-head: #e8e3d6;
+    --ink: #1a1a1a;
+    --ink-soft: #333030;
+    --ink-mute: #6a655c;
+    --rule: #d4ccba;
+    --rule-strong: #a8a08c;
+    --accent: #7a2424;
+    --accent-soft: #9a3030;
+    --warn: #8a5a1a;
+    --good: #2d4a2b;
+    --bad: #7a1a1a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    font-size: 14.5px;
+    font-feature-settings: "kern", "liga";
+    -webkit-font-smoothing: antialiased;
+}
+
+.serif { font-family: 'Fraunces', serif; font-optical-sizing: auto; }
+.mono  { font-family: 'JetBrains Mono', monospace; font-feature-settings: "tnum"; }
+
+/* === BARRA SUPERIOR === */
+.topbar {
+    position: sticky;
+    top: 0;
+    background: rgba(250, 248, 243, 0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    z-index: 100;
+    padding: 12px 0;
+}
+
+.topbar-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+}
+
+.brand {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+
+.brand span {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 500;
+}
+
+.nav-links {
+    display: flex;
+    gap: 22px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.nav-links a {
+    color: var(--ink-mute);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+    transition: all 0.15s;
+}
+
+.nav-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+@media (max-width: 720px) { .nav-links { display: none; } }
+
+/* === CONTENEDOR === */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 48px;
+}
+
+@media (max-width: 720px) { .container { padding: 0 20px; } }
+
+section {
+    padding: 52px 0;
+    border-bottom: 1px solid var(--rule);
+}
+
+section:last-of-type { border-bottom: none; }
+
+.section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-mute);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+/* === TÍTULOS === */
+h1.title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 2.1rem;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 14px;
+    color: var(--ink);
+}
+
+@media (max-width: 720px) { h1.title { font-size: 1.65rem; } }
+
+h2.section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.45rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin-bottom: 22px;
+    color: var(--ink);
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--ink);
+}
+
+/* === HERO === */
+.hero {
+    padding: 52px 0 36px;
+    border-bottom: 1.5px solid var(--ink);
+}
+
+.hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.hero-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-size: 12px;
+}
+
+.hero-meta-item {
+    padding: 4px 16px 4px 0;
+    border-right: 1px solid var(--rule);
+}
+
+.hero-meta-item:last-child { border-right: none; }
+
+@media (max-width: 720px) {
+    .hero-meta-item { border-right: none; padding: 6px 0; border-bottom: 1px solid var(--rule); }
+    .hero-meta-item:last-child { border-bottom: none; }
+}
+
+.hero-meta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+    margin-bottom: 3px;
+    font-weight: 500;
+}
+
+.hero-meta-value {
+    color: var(--ink);
+    font-weight: 500;
+    font-size: 12.5px;
+}
+
+p {
+    margin-bottom: 12px;
+    color: var(--ink-soft);
+}
+
+p strong { color: var(--ink); font-weight: 600; }
+
+/* === FORMULARIO DE PARÁMETROS === */
+.param-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule-strong);
+    margin-bottom: 20px;
+}
+
+@media (max-width: 800px) {
+    .param-grid { grid-template-columns: 1fr; }
+    .param-cell { border-right: none !important; border-bottom: 1px solid var(--rule); }
+    .param-cell:last-child { border-bottom: none; }
+}
+
+.param-cell {
+    padding: 18px 20px;
+    border-right: 1px solid var(--rule);
+    background: var(--bg);
+}
+
+.param-cell:last-child { border-right: none; }
+
+.param-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Tooltip */
+.tip {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 13px;
+    font-size: 9px;
+    color: var(--ink-mute);
+    cursor: help;
+    position: relative;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    text-transform: none;
+    letter-spacing: 0;
+    flex-shrink: 0;
+}
+
+.tip .tip-text {
+    visibility: hidden;
+    opacity: 0;
+    width: 240px;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 11px;
+    line-height: 1.5;
+    padding: 10px 12px;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    transition: opacity 0.15s;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.tip:hover .tip-text { visibility: visible; opacity: 1; }
+
+.param-input-wrap {
+    position: relative;
+}
+
+.param-input-prefix {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-mute);
+    font-weight: 500;
+    pointer-events: none;
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px 10px 10px 26px;
+    border: 1px solid var(--rule);
+    background: var(--bg-alt);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    -moz-appearance: textfield;
+    box-sizing: border-box;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+input[type="number"]:focus,
+select:focus {
+    border-color: var(--accent);
+    background: var(--bg);
+}
+
+select {
+    padding-left: 10px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Parentesco ocupa ancho completo */
+.param-full {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--rule);
+    border-right: none;
+}
+
+/* === GRILLA DE RESULTADOS === */
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule-strong);
+    margin-top: 24px;
+}
+
+@media (max-width: 720px) {
+    .comparison-grid { grid-template-columns: 1fr; }
+    .ledger { border-right: none !important; border-bottom: 1px solid var(--rule-strong); }
+    .ledger:last-child { border-bottom: none; }
+}
+
+.ledger {
+    padding: 22px 24px;
+    background: var(--bg);
+    border-right: 1px solid var(--rule-strong);
+}
+
+.ledger:last-child { border-right: none; }
+
+.ledger-header {
+    padding-bottom: 14px;
+    border-bottom: 1.5px solid var(--ink);
+    margin-bottom: 16px;
+}
+
+.ledger-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    padding: 3px 8px;
+    margin-bottom: 8px;
+    color: var(--bg);
+}
+
+.ledger-badge.herencia { background: var(--ink); }
+.ledger-badge.donacion { background: var(--accent); }
+
+.ledger-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+
+/* Filas de resultado */
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 7px 0;
+    border-bottom: 1px dotted var(--rule);
+    font-size: 13px;
+    gap: 12px;
+}
+
+.result-row:last-of-type { border-bottom: none; }
+
+.result-label {
+    color: var(--ink-mute);
+    flex-shrink: 0;
+}
+
+.result-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: right;
+    font-feature-settings: "tnum";
+}
+
+.result-row.subtotal {
+    border-bottom: none;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule-strong);
+    margin-top: 6px;
+}
+
+.result-row.subtotal .result-label { font-weight: 600; color: var(--ink); }
+.result-row.subtotal .result-val { font-size: 13px; }
+
+/* Bloque de impuesto final */
+.final-block {
+    margin-top: 14px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.final-block.herencia-pay {
+    background: var(--bg-alt);
+    border: 1px solid var(--rule-strong);
+    border-left: 3px solid var(--good);
+}
+
+.final-block.donacion-pay {
+    background: var(--bg-alt);
+    border: 1px solid var(--rule-strong);
+    border-left: 3px solid var(--accent);
+}
+
+.final-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    color: var(--ink-mute);
+}
+
+.final-amount {
+    font-family: 'Fraunces', serif;
+    font-size: 1.55rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+}
+
+.final-amount.herencia-color { color: var(--good); }
+.final-amount.donacion-color { color: var(--accent); }
+
+/* === CALLOUT / AHORRO === */
+.callout {
+    padding: 14px 18px;
+    border-left: 3px solid var(--accent);
+    background: var(--bg-alt);
+    margin: 20px 0;
+}
+
+.callout.neutral { border-left-color: var(--rule-strong); }
+.callout.good    { border-left-color: var(--good); }
+
+.callout-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.callout p {
+    margin-bottom: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+}
+
+/* Bloque de ahorro destacado */
+.saving-block {
+    background: var(--bg-alt);
+    border: 1px solid var(--rule-strong);
+    border-left: 3px solid var(--good);
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: center;
+    margin: 20px 0;
+}
+
+@media (max-width: 720px) {
+    .saving-block { grid-template-columns: 1fr; gap: 8px; }
+}
+
+.saving-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    line-height: 1;
+}
+
+.saving-num.positive { color: var(--good); }
+.saving-num.negative { color: var(--accent); }
+.saving-num.neutral  { color: var(--ink-mute); }
+
+.saving-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.saving-desc {
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+/* === TABLA DE TRAMOS === */
+.tabla-wrap {
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid var(--rule-strong);
+}
+
+table.tramos {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    background: var(--bg);
+}
+
+table.tramos th,
+table.tramos td {
+    padding: 7px 10px;
+    text-align: right;
+    border-bottom: 1px solid var(--rule);
+}
+
+table.tramos th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    background: var(--bg-table-head);
+    font-weight: 600;
+    border-bottom: 1px solid var(--rule-strong);
+}
+
+table.tramos th:first-child,
+table.tramos td:first-child { text-align: left; padding-left: 14px; }
+
+table.tramos td {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ink);
+    font-feature-settings: "tnum";
+}
+
+table.tramos td:first-child { font-family: 'Inter', sans-serif; }
+
+table.tramos tbody tr.active-row td {
+    background: #e8e3d6;
+    font-weight: 600;
+}
+
+table.tramos tbody tr:last-child td { border-bottom: none; }
+
+/* === PIE === */
+footer {
+    padding: 32px 0 28px;
+    border-top: 1.5px solid var(--ink);
+    background: var(--bg-alt);
+}
+
+.footer-inner {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 32px;
+}
+
+@media (max-width: 720px) { .footer-inner { grid-template-columns: 1fr; } }
+
+footer h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    margin-bottom: 10px;
+    font-weight: 600;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--rule-strong);
+}
+
+footer p {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+}
+
+.footer-stamp {
+    margin-top: 12px;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+}
+
+.note {
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin: 10px 0;
+    padding: 8px 0;
+    border-top: 1px solid var(--rule);
+    line-height: 1.55;
+}
+
+.note::before {
+    content: 'NOTA. ';
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+}
+
+@media print {
+    .topbar { display: none; }
+    body { font-size: 10pt; background: white; }
+    section { page-break-inside: avoid; padding: 16pt 0; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+    <div class="topbar-inner">
+        <div class="brand">Calculadora · <span>Herencia &amp; Donación</span></div>
+        <div class="nav-links">
+            <a href="#parametros">1. Parámetros</a>
+            <a href="#resultado">2. Resultado</a>
+            <a href="#tramos">3. Tramos Ley 16.271</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-tag">Herramienta de análisis tributario · Ley 16.271</div>
+        <h1 class="title">Análisis Comparativo Patrimonial — Herencia vs. Donación</h1>
+        <p style="font-family:'Fraunces',serif; font-size:1.02rem; color:var(--ink-soft); margin-bottom:0;">
+            Calcula y compara el impuesto aplicable bajo la Ley 16.271 según el tipo de traspaso patrimonial,
+            el parentesco y los valores UTM vigentes. Los resultados se actualizan en tiempo real.
+        </p>
+        <div class="hero-meta">
+            <div class="hero-meta-item">
+                <div class="hero-meta-label">Marco legal</div>
+                <div class="hero-meta-value">Ley N° 16.271</div>
+            </div>
+            <div class="hero-meta-item">
+                <div class="hero-meta-label">Tipo de cálculo</div>
+                <div class="hero-meta-value">Impuesto a las herencias y donaciones</div>
+            </div>
+            <div class="hero-meta-item">
+                <div class="hero-meta-label">Moneda</div>
+                <div class="hero-meta-value">Pesos chilenos (CLP)</div>
+            </div>
+            <div class="hero-meta-item">
+                <div class="hero-meta-label">Documento</div>
+                <div class="hero-meta-value">Informativo · No constituye asesoría legal</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PARÁMETROS -->
+<section id="parametros">
+    <div class="container">
+        <div class="section-label">1 · Datos de entrada</div>
+        <h2 class="section-title">1. Parámetros del cálculo</h2>
+        <p>
+            Ingresa los valores correspondientes al traspaso que se desea analizar.
+            El cálculo se actualiza automáticamente al modificar cualquier campo.
+        </p>
+
+        <div class="param-grid">
+            <div class="param-cell">
+                <div class="param-label">
+                    UTM Devengo (fallecimiento / donación)
+                    <span class="tip">i<span class="tip-text">Valor UTM del mes en que ocurre el fallecimiento o se formaliza la donación. Se usa para convertir el monto en pesos a UTM y calcular el impuesto bruto.</span></span>
+                </div>
+                <div class="param-input-wrap">
+                    <span class="param-input-prefix">$</span>
+                    <input type="number" id="utmFallecimiento" value="72000" min="1" step="1">
+                </div>
+            </div>
+            <div class="param-cell">
+                <div class="param-label">
+                    UTM Pago del impuesto
+                    <span class="tip">i<span class="tip-text">Valor UTM del mes en que se pagará el impuesto en Tesorería. Se usa para reconvertir el impuesto final (en UTM) a pesos al momento del pago.</span></span>
+                </div>
+                <div class="param-input-wrap">
+                    <span class="param-input-prefix">$</span>
+                    <input type="number" id="utmPago" value="72000" min="1" step="1">
+                </div>
+            </div>
+            <div class="param-cell">
+                <div class="param-label">Monto del traspaso (CLP)</div>
+                <div class="param-input-wrap">
+                    <span class="param-input-prefix">$</span>
+                    <input type="number" id="montoBeneficio" value="500000000" min="0" step="1000000">
+                </div>
+            </div>
+            <div class="param-cell param-full">
+                <div class="param-label">
+                    Parentesco con el beneficiario
+                    <span class="tip">i<span class="tip-text">Determina la exención aplicable y si corresponde recargo del 20%. Los parientes de primer orden (cónyuge, hijos, padres) tienen exención de 600 UTM en herencia y 60 UTM en donación. El resto tiene exención de 60 UTM y recargo de 20%.</span></span>
+                </div>
+                <select id="parentesco">
+                    <option value="Conyuge o Conviviente Civil">Cónyuge o Conviviente Civil</option>
+                    <option value="Madre">Madre</option>
+                    <option value="Padre">Padre</option>
+                    <option value="Hijo" selected>Hijo</option>
+                    <option value="Nieto">Nieto</option>
+                    <option value="Hermano">Hermano</option>
+                    <option value="Medio Hermano">Medio Hermano</option>
+                    <option value="Sobrino">Sobrino</option>
+                    <option value="Tío">Tío</option>
+                    <option value="Sobrino Nieto">Sobrino Nieto</option>
+                    <option value="Primo">Primo</option>
+                    <option value="Tío Abuelo">Tío Abuelo</option>
+                    <option value="Otros">2° o 3° colateral / Sin parentesco</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="callout neutral">
+            <div class="callout-title">Cómo funciona el cálculo</div>
+            <p>
+                El monto se convierte a UTM usando la UTM de devengo, se aplica la exención legal según parentesco,
+                y sobre la base afecta se calcula el impuesto por tramo. Si corresponde recargo (parentescos lejanos),
+                se suma un 20% adicional. El resultado se reconvierte a pesos usando la UTM de pago.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- RESULTADO -->
+<section id="resultado">
+    <div class="container">
+        <div class="section-label">2 · Comparativa de escenarios</div>
+        <h2 class="section-title">2. Resultado del análisis</h2>
+
+        <div class="comparison-grid">
+            <!-- Escenario A: Herencia -->
+            <div class="ledger">
+                <div class="ledger-header">
+                    <span class="ledger-badge herencia">Escenario A</span>
+                    <div class="ledger-title">Herencia</div>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Base imponible</span>
+                    <span class="result-val" id="resBaseImponible_H">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Exención legal</span>
+                    <span class="result-val" id="resExencion_H">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Base afecta</span>
+                    <span class="result-val" id="resBaseAfecta_H">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Tasa marginal</span>
+                    <span class="result-val" id="resTasa_H">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Impuesto bruto</span>
+                    <span class="result-val" id="resImpuestoBruto_H">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Recargo</span>
+                    <span class="result-val" id="resRecargo_H">—</span>
+                </div>
+                <div class="result-row subtotal">
+                    <span class="result-label">Total impuesto (UTM)</span>
+                    <span class="result-val" id="resImpuestoTotalUTM_H">—</span>
+                </div>
+                <div class="final-block herencia-pay">
+                    <div>
+                        <div class="final-label">Impuesto a pagar</div>
+                        <div class="final-amount herencia-color" id="resImpuestoTotalPesos_H">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Escenario B: Donación -->
+            <div class="ledger">
+                <div class="ledger-header">
+                    <span class="ledger-badge donacion">Escenario B</span>
+                    <div class="ledger-title">Donación en vida</div>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Base imponible</span>
+                    <span class="result-val" id="resBaseImponible_D">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Exención legal</span>
+                    <span class="result-val" id="resExencion_D">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Base afecta</span>
+                    <span class="result-val" id="resBaseAfecta_D">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Tasa marginal</span>
+                    <span class="result-val" id="resTasa_D">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Impuesto bruto</span>
+                    <span class="result-val" id="resImpuestoBruto_D">—</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Recargo</span>
+                    <span class="result-val" id="resRecargo_D">—</span>
+                </div>
+                <div class="result-row subtotal">
+                    <span class="result-label">Total impuesto (UTM)</span>
+                    <span class="result-val" id="resImpuestoTotalUTM_D">—</span>
+                </div>
+                <div class="final-block donacion-pay">
+                    <div>
+                        <div class="final-label">Impuesto a pagar</div>
+                        <div class="final-amount donacion-color" id="resImpuestoTotalPesos_D">$0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bloque de ahorro/diferencia -->
+        <div class="saving-block" id="savingBlock">
+            <div>
+                <div class="saving-label">Diferencia tributaria</div>
+                <div class="saving-num neutral" id="savingNum">—</div>
+            </div>
+            <div class="saving-desc" id="savingDesc">
+                Ingresa los parámetros para ver la comparativa.
+            </div>
+        </div>
+
+        <p class="note">
+            Los resultados son estimativos y se basan en la tabla de tramos vigente de la Ley 16.271.
+            No constituyen asesoría legal ni tributaria. Ante montos significativos, se recomienda
+            consultar con un abogado o asesor tributario habilitado.
+        </p>
+    </div>
+</section>
+
+<!-- TRAMOS -->
+<section id="tramos">
+    <div class="container">
+        <div class="section-label">3 · Referencia</div>
+        <h2 class="section-title">3. Tabla de tramos — Ley 16.271</h2>
+        <p>
+            El impuesto se calcula aplicando la tasa marginal del tramo correspondiente a la base afecta
+            y restando la deducción fija del tramo. El tramo activo según los valores ingresados
+            aparece destacado.
+        </p>
+
+        <div class="tabla-wrap">
+            <table class="tramos" id="tablaTramos">
+                <thead>
+                    <tr>
+                        <th>Tramo</th>
+                        <th>Desde (UTM)</th>
+                        <th>Hasta (UTM)</th>
+                        <th>Tasa</th>
+                        <th>Deducción fija (UTM)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-tramo="0"><td>1°</td><td>0,1</td><td>960,00</td><td>1,0%</td><td>0,00</td></tr>
+                    <tr data-tramo="1"><td>2°</td><td>960,01</td><td>1.920,00</td><td>2,5%</td><td>14,40</td></tr>
+                    <tr data-tramo="2"><td>3°</td><td>1.920,01</td><td>3.840,00</td><td>5,0%</td><td>62,40</td></tr>
+                    <tr data-tramo="3"><td>4°</td><td>3.840,01</td><td>5.760,00</td><td>7,5%</td><td>158,40</td></tr>
+                    <tr data-tramo="4"><td>5°</td><td>5.760,01</td><td>7.680,00</td><td>10,0%</td><td>302,40</td></tr>
+                    <tr data-tramo="5"><td>6°</td><td>7.680,01</td><td>9.600,00</td><td>15,0%</td><td>686,40</td></tr>
+                    <tr data-tramo="6"><td>7°</td><td>9.600,01</td><td>14.440,00</td><td>20,0%</td><td>1.166,40</td></tr>
+                    <tr data-tramo="7"><td>8°</td><td>14.440,01</td><td>∞</td><td>25,0%</td><td>1.886,40</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="callout neutral">
+            <div class="callout-title">Sobre el recargo del 20%</div>
+            <p>
+                Aplica a herederos o donatarios sin parentesco directo (línea colateral a partir del 2° grado
+                y sin parentesco). Se calcula sobre el impuesto bruto resultante de la tabla y se suma al total.
+                No modifica la tasa marginal del tramo.
+            </p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <div>
+                <h4>Sobre esta herramienta</h4>
+                <p>
+                    Calculadora de uso informativo. Los montos de exención, tramos y tasas corresponden
+                    a la Ley N° 16.271 sobre impuesto a las herencias, asignaciones y donaciones, con
+                    las actualizaciones vigentes al momento de publicación.
+                </p>
+                <p>
+                    Esta herramienta no reemplaza el análisis jurídico ni tributario de un caso específico.
+                    Las condiciones reales pueden variar según el tipo de bien, la existencia de cargas,
+                    resoluciones judiciales previas u otros factores no contemplados aquí.
+                </p>
+            </div>
+            <div>
+                <h4>Marco normativo</h4>
+                <p><strong>Ley N° 16.271</strong> · Impuesto a las Herencias, Asignaciones y Donaciones</p>
+                <p><strong>Unidad tributaria.</strong> UTM — Unidad Tributaria Mensual (Chile)</p>
+                <p><strong>Recargo colateral.</strong> 20% sobre impuesto bruto (art. 2°, Ley 16.271)</p>
+                <div class="footer-stamp">
+                    Documento informativo · No es asesoría legal ni tributaria
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+const tramos = [
+    { desde: 0.1,     hasta: 960,      tasa: 0.010, deduccion: 0      },
+    { desde: 960.01,  hasta: 1920,     tasa: 0.025, deduccion: 14.4   },
+    { desde: 1920.01, hasta: 3840,     tasa: 0.050, deduccion: 62.4   },
+    { desde: 3840.01, hasta: 5760,     tasa: 0.075, deduccion: 158.4  },
+    { desde: 5760.01, hasta: 7680,     tasa: 0.100, deduccion: 302.4  },
+    { desde: 7680.01, hasta: 9600,     tasa: 0.150, deduccion: 686.4  },
+    { desde: 9600.01, hasta: 14440,    tasa: 0.200, deduccion: 1166.4 },
+    { desde: 14440.01,hasta: Infinity, tasa: 0.250, deduccion: 1886.4 }
+];
+
+const parentescos = {
+    "Conyuge o Conviviente Civil": { exH: 600, exD: 60, recargo: 0 },
+    "Madre":         { exH: 600, exD: 60, recargo: 0 },
+    "Padre":         { exH: 600, exD: 60, recargo: 0 },
+    "Hijo":          { exH: 600, exD: 60, recargo: 0 },
+    "Nieto":         { exH: 600, exD: 60, recargo: 0 },
+    "Hermano":       { exH: 60,  exD: 60, recargo: 0.20 },
+    "Medio Hermano": { exH: 60,  exD: 60, recargo: 0.20 },
+    "Sobrino":       { exH: 60,  exD: 60, recargo: 0.20 },
+    "Tío":           { exH: 60,  exD: 60, recargo: 0.20 },
+    "Sobrino Nieto": { exH: 60,  exD: 60, recargo: 0.20 },
+    "Primo":         { exH: 60,  exD: 60, recargo: 0.20 },
+    "Tío Abuelo":    { exH: 60,  exD: 60, recargo: 0.20 },
+    "Otros":         { exH: 60,  exD: 60, recargo: 0.20 }
+};
+
+const fmtPesos = new Intl.NumberFormat('es-CL', { style:'currency', currency:'CLP', minimumFractionDigits:0 });
+const fmtNum   = new Intl.NumberFormat('es-CL', { minimumFractionDigits:2, maximumFractionDigits:2 });
+
+function calcular(baseImponible, exencion, recargo, utmPago) {
+    let baseAfecta = Math.max(0, baseImponible - exencion);
+    let impBruto = 0, tramoIdx = -1;
+    if (baseAfecta > 0.1) {
+        tramoIdx = tramos.findIndex(t => baseAfecta >= t.desde && baseAfecta <= t.hasta);
+        if (tramoIdx >= 0) {
+            const t = tramos[tramoIdx];
+            impBruto = Math.max(0, baseAfecta * t.tasa - t.deduccion);
+        }
+    }
+    const recargoMonto = impBruto * recargo;
+    const totalUTM     = impBruto + recargoMonto;
+    const totalPesos   = totalUTM * utmPago;
+    const tasa         = tramoIdx >= 0 ? tramos[tramoIdx].tasa : 0;
+    return { baseAfecta, impBruto, recargoMonto, totalUTM, totalPesos, tasa, tramoIdx };
+}
+
+function setEl(id, val) { document.getElementById(id).textContent = val; }
+
+function actualizar() {
+    const utmF  = parseFloat(document.getElementById('utmFallecimiento').value) || 0;
+    const utmP  = parseFloat(document.getElementById('utmPago').value) || 0;
+    const monto = parseFloat(document.getElementById('montoBeneficio').value) || 0;
+    const par   = document.getElementById('parentesco').value;
+
+    if (utmF <= 0 || utmP <= 0 || monto <= 0) {
+        ['H','D'].forEach(p => {
+            ['BaseImponible','Exencion','BaseAfecta','Tasa','ImpuestoBruto','Recargo','ImpuestoTotalUTM'].forEach(k => setEl('res'+k+'_'+p,'—'));
+            setEl('resImpuestoTotalPesos_'+p, '$0');
+        });
+        return;
+    }
+
+    const baseImponible = monto / utmF;
+    const d = parentescos[par];
+
+    const rH = calcular(baseImponible, d.exH, d.recargo, utmP);
+    const rD = calcular(baseImponible, d.exD, d.recargo, utmP);
+
+    // Herencia
+    setEl('resBaseImponible_H',    fmtNum.format(baseImponible)  + ' UTM');
+    setEl('resExencion_H',         fmtNum.format(d.exH)          + ' UTM');
+    setEl('resBaseAfecta_H',       fmtNum.format(rH.baseAfecta)  + ' UTM');
+    setEl('resTasa_H',             (rH.tasa*100).toFixed(1)      + '%');
+    setEl('resImpuestoBruto_H',    fmtNum.format(rH.impBruto)    + ' UTM');
+    setEl('resRecargo_H',          (d.recargo*100)+'% → '+ fmtNum.format(rH.recargoMonto)+' UTM');
+    setEl('resImpuestoTotalUTM_H', fmtNum.format(rH.totalUTM)   + ' UTM');
+    setEl('resImpuestoTotalPesos_H', fmtPesos.format(rH.totalPesos));
+
+    // Donación
+    setEl('resBaseImponible_D',    fmtNum.format(baseImponible)  + ' UTM');
+    setEl('resExencion_D',         fmtNum.format(d.exD)          + ' UTM');
+    setEl('resBaseAfecta_D',       fmtNum.format(rD.baseAfecta)  + ' UTM');
+    setEl('resTasa_D',             (rD.tasa*100).toFixed(1)      + '%');
+    setEl('resImpuestoBruto_D',    fmtNum.format(rD.impBruto)    + ' UTM');
+    setEl('resRecargo_D',          (d.recargo*100)+'% → '+ fmtNum.format(rD.recargoMonto)+' UTM');
+    setEl('resImpuestoTotalUTM_D', fmtNum.format(rD.totalUTM)   + ' UTM');
+    setEl('resImpuestoTotalPesos_D', fmtPesos.format(rD.totalPesos));
+
+    // Diferencia / ahorro
+    const diff = rH.totalPesos - rD.totalPesos;
+    const numEl  = document.getElementById('savingNum');
+    const descEl = document.getElementById('savingDesc');
+
+    if (diff > 0) {
+        numEl.textContent = fmtPesos.format(diff);
+        numEl.className = 'saving-num positive';
+        descEl.innerHTML = '<strong>La herencia resulta más cara.</strong> Traspasar en vida como donación reduciría el impuesto en ' + fmtPesos.format(diff) + ' respecto de la herencia, principalmente por la diferencia de exenciones.';
+    } else if (diff < 0) {
+        numEl.textContent = fmtPesos.format(Math.abs(diff));
+        numEl.className = 'saving-num negative';
+        descEl.innerHTML = '<strong>La donación resulta más cara.</strong> En este caso, la herencia generaría un menor impuesto por ' + fmtPesos.format(Math.abs(diff)) + '.';
+    } else {
+        numEl.textContent = '$0';
+        numEl.className = 'saving-num neutral';
+        descEl.textContent = 'Ambos escenarios generan el mismo impuesto con los parámetros ingresados.';
+    }
+
+    // Destacar tramo activo en la tabla (basado en herencia)
+    document.querySelectorAll('#tablaTramos tbody tr').forEach((tr, i) => {
+        tr.classList.toggle('active-row', i === rH.tramoIdx);
+    });
+}
+
+document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input',  actualizar);
+    el.addEventListener('change', actualizar);
+});
+
+window.addEventListener('load', actualizar);
+</script>
+
+</body>
+</html>
